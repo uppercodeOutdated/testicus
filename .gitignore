@@ -1,0 +1,5 @@
+/reports/
+/report_allure
+/tmp/
+/allure-report
+/log/*.log
