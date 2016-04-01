@@ -1,3 +1,4 @@
+# gems
 require 'rubygems'
 require 'capybara'
 require 'capybara/dsl'
@@ -7,16 +8,31 @@ require 'site_prism'
 require 'appium_lib'
 require 'appium_capybara'
 
-require 'pry' # for debugging
+# debug
+require 'pry'
 
-# require capybara settings
+# settings
+require './config/initializers/settings'
+require './config/initializers/drivers'
+
 require './support/capybara_settings'
-require './support/appium_session_crutch'
-require './support/capybara_session_crutch'
+require './lib/appium/capybara/driver'
+require './lib/capybara/selenium/driver'
 
-# require page objects classes
+# pages
 require './pages/app_pages'
 
+# rspec
 RSpec.configure do |config|
   config.include Capybara::DSL
 end
+
+# capybara
+default_driver = -> (mode, platform, browser) { [mode, platform, browser].compact.join('_').to_sym }
+
+Capybara.configure do |config|
+  config.run_server      = false
+  config.app_host        = Settings.application.url
+  config.default_driver  = default_driver.call ENV['MODE'], ENV['PLATFORM'], ENV['BROWSER']
+end
+

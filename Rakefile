@@ -1,56 +1,91 @@
 #require 'rspec'
 require 'rspec/core/rake_task'
 
-task default: ['test:web:all']
+MODES     = %w{ desktop tablet mobile }.freeze
+BROWSERS  = %w{ firefox chrome safari }.freeze
+PLATFORMS = %w{ android ios           }.freeze
+
+task default: ['test:desktop:all']
 
 namespace :test do
 
   task :all do
-    Rake::Task['test:mobile:chrome' ].invoke
-    Rake::Task['test:web:firefox'   ].invoke
-    Rake::Task['test:web:chrome'    ].invoke
+    Rake::Task['test:desktop:all'].invoke
+    Rake::Task['test:tablet:all' ].invoke
+    Rake::Task['test:mobile:all' ].invoke
   end
 
-  namespace :web do
+  namespace :desktop do
     task :all do
-      Rake::Task['test:web:firefox'].invoke
-      Rake::Task['test:web:chrome' ].invoke
+      BROWSERS.each do |browser|
+        Rake::Task["test:desktop:#{browser}"].invoke
+      end
     end
 
-    task :firefox do
-      task('spec').clear
+    BROWSERS.each do |browser|
+      task browser.to_sym do
+        task('spec').clear
 
-      ENV['mode']    = 'web'
-      ENV['browser'] = 'firefox'
+        ENV['MODE']    = 'desktop'
+        ENV['BROWSER'] = browser
 
-      RSpec::Core::RakeTask.new(:spec)
-      Rake::Task['spec'].execute 
+        RSpec::Core::RakeTask.new(:spec)
+        Rake::Task['spec'].execute 
+      end
+    end
+  end
+
+  namespace :tablet do
+    task :all do
+      PLATFORMS.each do |plaform|
+        BROWSERS.each do |browser| 
+          Rake::Task["test:tablet:#{plaform}:#{browser}"].invoke
+        end
+      end
     end
 
-    task :chrome do
-      task('spec').clear
+    PLATFORMS.each do |plaform|
+      namespace plaform.to_sym do
+        BROWSERS.each do |browser|
+          task browser.to_sym do
+            task('spec').clear
 
-      ENV['mode']    = 'web'
-      ENV['browser'] = 'chrome'
+            ENV['MODE']     = 'tablet'
+            ENV['PLATFORM'] = plaform
+            ENV['BROWSER']  = browser
 
-      RSpec::Core::RakeTask.new(:spec)
-      Rake::Task['spec'].execute 
+            RSpec::Core::RakeTask.new(:spec)
+            Rake::Task['spec'].execute 
+          end
+        end
+      end
     end
   end
 
   namespace :mobile do
     task :all do
-      Rake::Task['test:mobile:chrome' ].invoke
+      PLATFORMS.each do |plaform|
+        BROWSERS.each do |browser| 
+          Rake::Task["test:mobile:#{plaform}:#{browser}"].invoke
+        end
+      end
     end
 
-    task :chrome do
-      task('spec').clear
+    PLATFORMS.each do |plaform|
+      namespace plaform.to_sym do
+        BROWSERS.each do |browser|
+          task browser.to_sym do
+            task('spec').clear
 
-      ENV['mode']    = 'mobile'
-      ENV['browser'] = 'chrome'
+            ENV['MODE']     = 'mobile'
+            ENV['PLATFORM'] = plaform
+            ENV['BROWSER']  = browser
 
-      RSpec::Core::RakeTask.new(:spec)
-      Rake::Task['spec'].execute 
+            RSpec::Core::RakeTask.new(:spec)
+            Rake::Task['spec'].execute 
+          end
+        end
+      end
     end
   end
 

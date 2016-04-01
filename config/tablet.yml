@@ -1,0 +1,38 @@
+android:
+  chrome:
+    caps:
+      platform:        Android
+      deviceName:      38f4c818
+      platformName:    Android
+      platformVersion: 4.4.2
+      browserName:     Chrome
+  firefox:
+    caps:
+      platform:        Android
+      deviceName:      38f4c818
+      platformName:    Android
+      platformVersion: 4.4.2
+      browserName:     Firefox
+
+ios:
+  chrome:
+    caps:
+      platform:        Mac
+      deviceName:      'iPad'
+      platformName:    iOS
+      platformVersion: 7.1
+      browserName:     Chrome
+  firefox:
+    caps:
+      platform:        Mac
+      deviceName:      'iPad'
+      platformName:    iOS
+      platformVersion: 7.1
+      browserName:     Firefox
+  safari:
+    caps:
+      platform:        Mac
+      deviceName:      'iPad'
+      platformName:    iOS
+      platformVersion: 7.1
+      browserName:     Safari

@@ -1,0 +1,8 @@
+firefox:
+  browser: :firefox
+
+chrome:
+  browser: :chrome
+
+safari:
+  browser: :safari

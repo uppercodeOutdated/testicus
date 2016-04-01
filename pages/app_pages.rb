@@ -1,15 +1,15 @@
-# require all web page-object classes
-module Web; end
-Dir['./pages/web/*.rb'].each{ |f| require f }
+module Desktop; end
+module Tablet;  end
+module Mobile;  end
 
-# require all mobile page-object classes
-module Mobile; end
-Dir['./pages/mobile/*.rb'].each{ |f| require f }
+Dir['./pages/desktop/*.rb'].each{ |f| require f }
+Dir['./pages/tablet/*.rb' ].each{ |f| require f }
+Dir['./pages/mobile/*.rb' ].each{ |f| require f }
 
 class AppPages
 
   def welcome_page
-  	Object.const_get("#{ENV['mode'].capitalize}::WelcomePage").new
+    Object.const_get("#{ENV['mode'].capitalize}::WelcomePage").new
   end
 
 end
